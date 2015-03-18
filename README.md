@@ -16,7 +16,7 @@ julia> div("#foo.bar", "hi")
 HTML nodes are stored as the `Node{T}` type which renders itself smartly.
 
 ```julia
-julia> Node(:img, "#id.class1.class2", @d(:src=>"http://www.com"))
+julia> Node(:img, "#id.class1.class2", [:src=>"http://www.com"])
 <img class="class1 class2" src="http://www.com" id="id"></img>
 
 julia> tag(ans)
