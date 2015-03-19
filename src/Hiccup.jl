@@ -99,6 +99,11 @@ macro exporttags (ts)
   end
 end
 
-@exporttags div, span, a, h1, h2, h3, b, table, tr, td, em, strong
+@exporttags div, span, a,
+            h1, h2, h3,
+            html, head, body,
+            pre, code,
+            img, style,
+            ol, ul, li, table, tr, td,
 
 end # module
