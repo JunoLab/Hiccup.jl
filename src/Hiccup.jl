@@ -104,6 +104,6 @@ end
             html, head, body,
             pre, code,
             img, style,
-            ol, ul, li, table, tr, td,
+            ol, ul, li, table, tr, td
 
 end # module
