@@ -28,7 +28,7 @@ A bunch of utility functions, with the names of tags, are provided which make th
 ```julia
 julia> @tags img, svg
 
-julia> svg("#id.class1.class2", @d(:src=>"http://www.com"))
+julia> svg("#id.class1.class2", [:src=>"http://www.com"])
 <svg class="class1 class2" src="http://www.com" id="id"></svg>
 ```
 
