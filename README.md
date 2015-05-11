@@ -1,7 +1,7 @@
 # Hiccup
 
 ```julia
-Pkg.clone("http://github.com/one-more-minute/Hiccup.jl")
+Pkg.add("Hiccup")
 ```
 
 Hiccup.jl is a super-simple library designed to make making HTML easy in Julia. It's heavily inspired by Clojure's [Hiccup](https://github.com/weavejester/hiccup) DSL.
