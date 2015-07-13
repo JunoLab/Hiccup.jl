@@ -2,6 +2,8 @@ module Hiccup
 
 using Lazy
 
+import Base.Meta.isexpr
+
 export Node, tag, @tags, @exporttags
 
 # Basic Types
@@ -84,7 +86,7 @@ Node(tag::Symbol, io::IO, args...) = render(io, Node(tag, args...))
 
 tags(t) = :(($t)(args...; kws...) = Node($(Expr(:quote, t)), args...; kws...))
 
-macro tags (ts)
+macro tags(ts)
   isexpr(ts, Symbol) && (ts = Expr(:tuple, ts))
   @assert isexpr(ts, :tuple)
   quote
@@ -92,7 +94,7 @@ macro tags (ts)
   end |> esc
 end
 
-macro exporttags (ts)
+macro exporttags(ts)
   quote
     @tags $(esc(ts))
     $(Expr(:export, (isexpr(ts, Symbol) ? [ts] : ts.args)...))
