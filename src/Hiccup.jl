@@ -1,8 +1,6 @@
 module Hiccup
 
-using Lazy
-
-import Base.Meta.isexpr
+using Lazy, MacroTools
 
 export Node, tag, @tags, @exporttags
 
