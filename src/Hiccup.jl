@@ -30,11 +30,12 @@ Node(tag::Symbol, content::Node...) = Node(tag, collect(content))
 # CSS selector parsing
 
 function cssparse(s)
+  trimfirst(s) = s[2:end]
   attrs = Dict()
   id = match(r"#[A-Za-z0-9]+", s)
-  id == nothing || (attrs[:id] = id.match[2:end])
-  classes = matchall(r"-?[_a-zA-Z]+[_a-zA-Z0-9-]*", s)
-  isempty(classes) || (attrs[:class] = classes)
+  id == nothing || (attrs[:id] = trimfirst(id.match))
+  classes = matchall(r"\.-?[_a-zA-Z]+[_a-zA-Z0-9-]*", s)
+  isempty(classes) || (attrs[:class] = map(trimfirst, classes))
   return attrs
 end
 
