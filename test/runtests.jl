@@ -2,7 +2,7 @@ using Hiccup
 using Base.Test
 using Compat
 
-@test beginswith(sprint(Hiccup.render, Node(:img, "#id.class1.class2", [:src=>"http://www.com"])), "<img class=\"class1 class2\"")
+@test contains(sprint(Hiccup.render, Node(:img, "#id.class1.class2", @compat Dict(:src=>"http://www.com"))), "class=\"class1 class2\"")
 
 classMatching = ((".section-title", "section-title"),
                  (".test", "test"),
@@ -20,5 +20,5 @@ classMatching = ((".section-title", "section-title"),
                  ("#id.-test.test2", "-test test2"),
                  ("#id.-test.-test2", "-test -test2"))
 for (in, expected) in classMatching
-  @test beginswith(sprint(Hiccup.render, div(in, "contents")), string("<div class=\"", expected, "\""))
+  @test contains(sprint(Hiccup.render, Hiccup.div(in, "contents")), expected)
 end
