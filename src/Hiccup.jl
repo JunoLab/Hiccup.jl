@@ -4,6 +4,11 @@ using Lazy, MacroTools, Compat
 
 export Node, tag, @tags, @exporttags
 
+# Void elements; not allowed to contain content
+# See: http://www.w3.org/TR/html5/syntax.html#void-elements
+const VOID_ELEMENTS = Set([:area, :base, :br, :col, :embed, :hr, :img, :input,
+  :keygen, :link, :meta, :param, :source, :track, :wbr])
+
 # Basic Types
 
 type Node{tag}
@@ -15,9 +20,15 @@ tag{T}(node::Node{T}) = T
 attrs(node::Node) = node.attrs
 children(node::Node) = node.children
 
-Node(tag::Symbol, attrs::Dict = Dict(), content::AbstractVector = c(); kws...) =
-  Node{tag}(isempty(kws) ? attrs : merge(attrs, Dict([kws...])),
-            content)
+isvoid(tag::Symbol) = tag in VOID_ELEMENTS
+isvoid(node::Node) = isvoid(tag(node))
+
+function Node(tag::Symbol, attrs::Dict = Dict(), content::AbstractVector = c(); kws...)
+  if isvoid(tag) && !isempty(content)
+    throw(ArgumentError("Void tag <$tag> cannot have content."))
+  end
+  Node{tag}(isempty(kws) ? attrs : merge(attrs, Dict([kws...])), content)
+end
 
 Node(tag::Symbol, attrs::Associative, content; kws...) =
   Node(tag, attrs, c(content); kws...)
@@ -61,10 +72,14 @@ render(io::IO, s::AbstractString) = print(io, htmlescape(s))
 function render(io::IO, node::Node)
   print(io, "<", tag(node))
   isempty(attrs(node)) || print(io, " ", attrstring(attrs(node)))
-  print(io, ">")
-  render(io, children(node))
+  if isvoid(node)
+    print(io, " />")
+  else
+    print(io, ">")
+    render(io, children(node))
 
-  print(io, "</", tag(node), ">")
+    print(io, "</", tag(node), ">")
+  end
 end
 
 function render(io::IO, xs::Vector)
