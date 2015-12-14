@@ -33,7 +33,7 @@ end
 @test string(br()) == "<br />"
 @test string(img(".image-test", [])) == "<img class=\"image-test\" />"
 @test contains(
-  string(link(Dict(:rel => "stylesheet", :href => "test.css"))),
+  string(link(@compat Dict(:rel => "stylesheet", :href => "test.css"))),
   "/>")
 @test_throws ArgumentError img(strong(".test", "test"))
 
