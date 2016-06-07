@@ -62,7 +62,7 @@ export htmlescape
 
 attrstring(xs::Vector) = join(xs, " ")
 attrstring(x) = string(x)
-attrstring(d::Dict) = @as _ d map(t->"$(t[1])=\"$(attrstring(t[2]))\"", _) join(_, " ")
+attrstring(d::Dict) = @as _ d ["$(t[1])=\"$(attrstring(t[2]))\"" for t in _] join(_, " ")
 
 htmlescape(s::AbstractString) =
     @> s replace(r"&(?!(\w+|\#\d+);)", "&amp;") replace("<", "&lt;") replace(">", "&gt;") replace("\"", "&quot;")
