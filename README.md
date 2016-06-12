@@ -9,7 +9,7 @@ Hiccup.jl is a super-simple library designed to make making HTML easy in Julia. 
 ```julia
 julia> using Hiccup
 
-julia> div("#foo.bar", "hi")
+julia> Hiccup.div("#foo.bar", "hi")
 <div class="bar" id="foo">hi</div>
 ```
 

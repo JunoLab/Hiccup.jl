@@ -115,12 +115,18 @@ macro exporttags(ts)
   end
 end
 
-@exporttags div, span, a,
+@exporttags span, a,
             h1, h2, h3,
             html, head, body,
             pre, code,
             img, style,
             ol, ul, li, table, tr, td,
             strong
+
+if VERSION < v"0.4"
+  @exporttags div
+else
+  @tags div
+end
 
 end # module
