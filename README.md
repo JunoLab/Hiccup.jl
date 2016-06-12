@@ -16,8 +16,8 @@ julia> Hiccup.div("#foo.bar", "hi")
 HTML nodes are stored as the `Node{T}` type which renders itself smartly.
 
 ```julia
-julia> Node(:img, "#id.class1.class2", [:src=>"http://www.com"])
-<img class="class1 class2" src="http://www.com" id="id"></img>
+julia> Node(:img, "#id.class1.class2", Dict(:src=>"http://www.com"))
+<img src="http://www.com" id="id" class="class1 class2" />
 
 julia> tag(ans)
 :img
@@ -28,7 +28,7 @@ A bunch of utility functions, with the names of tags, are provided which make th
 ```julia
 julia> @tags img, svg
 
-julia> svg("#id.class1.class2", [:src=>"http://www.com"])
+julia> svg("#id.class1.class2", Dict(:src=>"http://www.com"))
 <svg class="class1 class2" src="http://www.com" id="id"></svg>
 ```
 
