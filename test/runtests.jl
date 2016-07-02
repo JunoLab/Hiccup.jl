@@ -39,3 +39,10 @@ end
 
 # tests for normal tags
 @test string(ediv(ediv(ediv()))) == "<div><div><div></div></div></div>"
+
+# test escapes
+@test string(Node(:pre, "<p>fish &amp; chips</p>")) ==
+  "<pre>&lt;p&gt;fish &amp;amp; chips&lt;/p&gt;</pre>"
+
+@test string(Node(:a, "link", href="http://example.com/test?a&b")) ==
+  "<a href=\"http://example.com/test?a&amp;b\">link</a>"
