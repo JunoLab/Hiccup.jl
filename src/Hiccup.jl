@@ -60,12 +60,13 @@ Node(tag::Symbol, selector::AbstractString, content, args...; kws...) =
 
 export htmlescape
 
-attrstring(xs::Vector) = join(xs, " ")
-attrstring(x) = string(x)
-attrstring(d::Dict) = @as _ d ["$(t[1])=\"$(attrstring(t[2]))\"" for t in _] join(_, " ")
-
 htmlescape(s::AbstractString) =
-    @> s replace(r"&(?!(\w+|\#\d+);)", "&amp;") replace("<", "&lt;") replace(">", "&gt;") replace("\"", "&quot;")
+  @> s replace("&", "&amp;") replace("<", "&lt;") replace(">", "&gt;")
+
+attrstring(xs::Vector) = join(xs, " ")
+attrstring(x) =
+  @> x string htmlescape replace("\"", "&quot;") replace("'", "&#39;")
+attrstring(d::Dict) = @as _ d ["$(t[1])=\"$(attrstring(t[2]))\"" for t in _] join(_, " ")
 
 render(io::IO, s::AbstractString) = print(io, htmlescape(s))
 
