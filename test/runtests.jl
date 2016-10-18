@@ -46,3 +46,9 @@ end
 
 @test string(Node(:a, "link", href="http://example.com/test?a&b")) ==
   "<a href=\"http://example.com/test?a&amp;b\">link</a>"
+
+# test trusted vs. untrusted HTML
+@test string(ediv(TrustedHtml("<p>trusted</p>"))) ==
+  "<div><p>trusted</p></div>"
+@test string(ediv("<p>not trusted</p>")) ==
+  "<div>&lt;p&gt;not trusted&lt;/p&gt;</div>"

@@ -2,7 +2,7 @@ module Hiccup
 
 using Lazy, MacroTools, Compat
 
-export Node, tag, @tags, @exporttags
+export Node, tag, @tags, @exporttags, TrustedHtml
 
 # Void elements; not allowed to contain content
 # See: http://www.w3.org/TR/html5/syntax.html#void-elements
@@ -14,6 +14,15 @@ const VOID_ELEMENTS = Set([:area, :base, :br, :col, :embed, :hr, :img, :input,
 type Node{tag}
   attrs::Dict{Any, Any}
   children::Vector{Any}
+end
+
+"""
+Type to contain HTML from a trusted source that should be rendered directly
+instead of escaped. For instance, the HTML serialization of many types would
+typically qualify as trusted HTML that should not be escaped.
+"""
+type TrustedHtml
+  data::Compat.UTF8String
 end
 
 tag{T}(node::Node{T}) = T
@@ -69,6 +78,7 @@ attrstring(x) =
 attrstring(d::Dict) = @as _ d ["$(t[1])=\"$(attrstring(t[2]))\"" for t in _] join(_, " ")
 
 render(io::IO, s::AbstractString) = print(io, htmlescape(s))
+render(io::IO, s::TrustedHtml) = print(io, s.data)
 
 function render(io::IO, node::Node)
   print(io, "<", tag(node))
