@@ -1,8 +1,12 @@
 module Hiccup
 
-using Lazy, MacroTools, Compat
+using MacroTools, Compat
+
+import MacroTools: @>
 
 export Node, tag, @tags, @exporttags
+
+c(xs...) = Any[xs...]
 
 # Void elements; not allowed to contain content
 # See: http://www.w3.org/TR/html5/syntax.html#void-elements
@@ -66,7 +70,7 @@ htmlescape(s::AbstractString) =
 attrstring(xs::Vector) = join(xs, " ")
 attrstring(x) =
   @> x string htmlescape replace("\"", "&quot;") replace("'", "&#39;")
-attrstring(d::Dict) = @as _ d ["$(t[1])=\"$(attrstring(t[2]))\"" for t in _] join(_, " ")
+attrstring(d::Dict) = join(" ", "$k=\"$(attrstring(v))\"" for (k, v) in d)
 
 render(io::IO, s::AbstractString) = print(io, htmlescape(s))
 
