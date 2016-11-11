@@ -70,7 +70,7 @@ htmlescape(s::AbstractString) =
 attrstring(xs::Vector) = join(xs, " ")
 attrstring(x) =
   @> x string htmlescape replace("\"", "&quot;") replace("'", "&#39;")
-attrstring(d::Dict) = join(" ", "$k=\"$(attrstring(v))\"" for (k, v) in d)
+attrstring(d::Dict) = join(("$k=\"$(attrstring(v))\"" for (k, v) in d), " ")
 
 render(io::IO, s::AbstractString) = print(io, htmlescape(s))
 
