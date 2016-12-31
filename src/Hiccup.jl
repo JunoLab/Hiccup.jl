@@ -4,7 +4,7 @@ using MacroTools, Compat
 
 import MacroTools: @>
 
-export Node, tag, @tags, @exporttags
+export Node, tag, @tags, @exporttags, TrustedHtml
 
 c(xs...) = Any[xs...]
 
@@ -18,6 +18,15 @@ const VOID_ELEMENTS = Set([:area, :base, :br, :col, :embed, :hr, :img, :input,
 type Node{tag}
   attrs::Dict{Any, Any}
   children::Vector{Any}
+end
+
+"""
+Type to contain HTML from a trusted source that should be rendered directly
+instead of escaped. For instance, the HTML serialization of many types would
+typically qualify as trusted HTML that should not be escaped.
+"""
+type TrustedHtml
+  data::Compat.UTF8String
 end
 
 tag{T}(node::Node{T}) = T
@@ -73,6 +82,7 @@ attrstring(x) =
 attrstring(d::Dict) = join(("$k=\"$(attrstring(v))\"" for (k, v) in d), " ")
 
 render(io::IO, s::AbstractString) = print(io, htmlescape(s))
+render(io::IO, s::TrustedHtml) = print(io, s.data)
 
 function render(io::IO, node::Node)
   print(io, "<", tag(node))
