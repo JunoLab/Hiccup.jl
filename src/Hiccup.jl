@@ -1,3 +1,4 @@
+__precompile__()
 module Hiccup
 
 using MacroTools, Compat
@@ -128,10 +129,6 @@ end
             ol, ul, li, table, tr, td,
             strong
 
-if VERSION < v"0.4"
-  @exporttags div
-else
-  @tags div
-end
+@tags div
 
 end # module
