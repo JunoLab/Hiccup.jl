@@ -115,9 +115,9 @@ end
 
 macro exporttags(ts)
   quote
-    @tags $(esc(ts))
+    @tags $(ts)
     $(Expr(:export, (isexpr(ts, Symbol) ? [ts] : ts.args)...))
-  end
+  end |> esc
 end
 
 @exporttags span, a,
