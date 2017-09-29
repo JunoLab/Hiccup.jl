@@ -7,7 +7,7 @@ using Compat
 # hiccup div conflicts with main div, so use this as compromise
 ediv = Hiccup.div
 
-@test contains(sprint(Hiccup.render, Node(:img, "#id.class1.class2", @compat Dict(:src=>"http://www.com"))), "class=\"class1 class2\"")
+@test contains(sprint(Hiccup.render, Node(:img, "#id.class1.class2", Dict(:src=>"http://www.com"))), "class=\"class1 class2\"")
 
 classMatching = ((".section-title", "section-title"),
                  (".test", "test"),
@@ -33,7 +33,7 @@ end
 @test string(br()) == "<br />"
 @test string(img(".image-test", [])) == "<img class=\"image-test\" />"
 @test contains(
-  string(link(@compat Dict(:rel => "stylesheet", :href => "test.css"))),
+  string(link(Dict(:rel => "stylesheet", :href => "test.css"))),
   "/>")
 @test_throws ArgumentError img(strong(".test", "test"))
 

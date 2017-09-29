@@ -93,9 +93,9 @@ function render(io::IO, xs::Vector)
   end
 end
 
-render(io::IO, x) = @compat show(io, MIME"text/html"(), x)
+render(io::IO, x) = show(io, MIME"text/html"(), x)
 
-@compat Base.show(io::IO, ::MIME"text/html", node::Node) = render(io, node)
+Base.show(io::IO, ::MIME"text/html", node::Node) = render(io, node)
 
 Base.show(io::IO, node::Node) = render(io, node)
 
@@ -128,10 +128,6 @@ end
             ol, ul, li, table, tr, td,
             strong
 
-if VERSION < v"0.4"
-  @exporttags div
-else
-  @tags div
-end
+@tags div
 
 end # module
