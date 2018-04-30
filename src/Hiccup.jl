@@ -50,7 +50,7 @@ function cssparse(s)
   attrs = Dict()
   id = match(r"#-?[_a-zA-Z][_a-zA-Z0-9-]*", s)
   id == nothing || (attrs[:id] = trimfirst(id.match))
-  classes = matchall(r"\.-?[_a-zA-Z][_a-zA-Z0-9-]*", s)
+  classes = collect((m.match for m = eachmatch(r"\.-?[_a-zA-Z][_a-zA-Z0-9-]*", s)))
   isempty(classes) || (attrs[:class] = map(trimfirst, classes))
   return attrs
 end
