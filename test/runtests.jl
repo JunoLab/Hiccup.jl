@@ -1,13 +1,12 @@
 using Hiccup
-using Base.Test
-using Compat
+using Test
 
 @tags br, link
 
 # hiccup div conflicts with main div, so use this as compromise
 ediv = Hiccup.div
 
-@test contains(sprint(Hiccup.render, Node(:img, "#id.class1.class2", Dict(:src=>"http://www.com"))), "class=\"class1 class2\"")
+@test occursin("class=\"class1 class2\"", sprint(Hiccup.render, Node(:img, "#id.class1.class2", Dict(:src=>"http://www.com"))))
 
 classMatching = ((".section-title", "section-title"),
                  (".test", "test"),
@@ -25,16 +24,16 @@ classMatching = ((".section-title", "section-title"),
                  ("#id.-test.test2", "-test test2"),
                  ("#id.-test.-test2", "-test -test2"))
 for (in, expected) in classMatching
-  @test contains(sprint(Hiccup.render, Hiccup.div(in, "contents")), expected)
+  @test occursin(expected, sprint(Hiccup.render, Hiccup.div(in, "contents")))
 end
 
 
 # tests for void tags
 @test string(br()) == "<br />"
 @test string(img(".image-test", [])) == "<img class=\"image-test\" />"
-@test contains(
-  string(link(Dict(:rel => "stylesheet", :href => "test.css"))),
-  "/>")
+@test occursin(
+  "/>",
+  string(link(Dict(:rel => "stylesheet", :href => "test.css"))))
 @test_throws ArgumentError img(strong(".test", "test"))
 
 # tests for normal tags
