@@ -1,7 +1,7 @@
 __precompile__()
 module Hiccup
 
-using MacroTools, Compat
+using MacroTools
 
 import MacroTools: @>
 
@@ -16,12 +16,12 @@ const VOID_ELEMENTS = Set([:area, :base, :br, :col, :embed, :hr, :img, :input,
 
 # Basic Types
 
-type Node{tag}
+mutable struct Node{tag}
   attrs::Dict{Any, Any}
   children::Vector{Any}
 end
 
-tag{T}(node::Node{T}) = T
+tag(node::Node{T}) where {T} = T
 attrs(node::Node) = node.attrs
 children(node::Node) = node.children
 
@@ -35,7 +35,7 @@ function Node(tag::Symbol, attrs::Dict = Dict(), content::AbstractVector = c(); 
   Node{tag}(isempty(kws) ? attrs : merge(attrs, Dict([kws...])), content)
 end
 
-Node(tag::Symbol, attrs::Associative, content; kws...) =
+Node(tag::Symbol, attrs::AbstractDict, content; kws...) =
   Node(tag, attrs, c(content); kws...)
 
 Node(tag::Symbol, content; kws...) =
@@ -66,11 +66,11 @@ Node(tag::Symbol, selector::AbstractString, content, args...; kws...) =
 export htmlescape
 
 htmlescape(s::AbstractString) =
-  @> s replace("&", "&amp;") replace("<", "&lt;") replace(">", "&gt;")
+  @> s replace("&" => "&amp;") replace("<" => "&lt;") replace(">" => "&gt;")
 
 attrstring(xs::Vector) = join(xs, " ")
 attrstring(x) =
-  @> x string htmlescape replace("\"", "&quot;") replace("'", "&#39;")
+  @> x string htmlescape replace("\"" => "&quot;") replace("'" => "&#39;")
 attrstring(d::Dict) = join(("$k=\"$(attrstring(v))\"" for (k, v) in d), " ")
 
 render(io::IO, s::AbstractString) = print(io, htmlescape(s))
