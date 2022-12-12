@@ -1,0 +1,11 @@
+name = "Hiccup"
+uuid = "9fb69e20-1954-56bb-a84f-559cc56a8ff7"
+repo = "https://github.com/JunoLab/Hiccup.jl.git"
+version = "0.2.3"
+
+[deps]
+MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
+
+[compat]
+MacroTools = "0.5"
+julia = "1"
